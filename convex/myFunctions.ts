@@ -41,6 +41,11 @@ export const addNumber = mutation({
     //// Mutations can also read from the database like queries.
     //// See https://docs.convex.dev/database/writing-data.
 
+    const identity = await ctx.auth.getUserIdentity();
+    if (identity === null) {
+      throw new Error("User is not authenticated");
+    }
+
     const id = await ctx.db.insert("numbers", { value: args.value });
 
     console.log("Added new document with id:", id);

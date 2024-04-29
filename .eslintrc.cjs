@@ -43,4 +43,12 @@ module.exports = {
     // for consistency (esp. Convex `handler`s)
     "@typescript-eslint/require-await": "off",
   },
+  overrides: [
+    {
+      files: ["convex/auth.config.ts"],
+      rules: {
+        "import/no-anonymous-default-export": "off",
+      },
+    },
+  ],
 };

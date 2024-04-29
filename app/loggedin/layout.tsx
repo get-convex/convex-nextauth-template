@@ -1,39 +1,42 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 
-import { signIn } from "@/auth";
+import ConvexClientProvider from "@/app/ConvexClientProvider";
+import { auth, signOut } from "@/auth";
 import { StickyHeader } from "@/components/layout/sticky-header";
 import { Button } from "@/components/ui/button";
 
-export default function Home() {
+export default async function LoggedInLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await auth();
   return (
     <>
       <StickyHeader className="px-4 py-2">
         <div className="flex justify-between items-center">
           Convex + Next.js + Auth.js
-          <SignIn />
+          <SignOut />
         </div>
       </StickyHeader>
       <main className="container max-w-2xl flex flex-col gap-8">
-        <h1 className="text-4xl font-extrabold my-8 text-center">
-          Convex + Next.js + Auth.js
-        </h1>
-        <p>Here is where your marketing message goes.</p>
-        <p>The user doesn&apos;t need to log in to see it.</p>
-        <p>To interact with the app log in via the button up top.</p>
+        <ConvexClientProvider session={session}>
+          {children}
+        </ConvexClientProvider>
       </main>
     </>
   );
 }
 
-export function SignIn() {
+export function SignOut() {
   return (
     <form
       action={async () => {
         "use server";
-        await signIn("github", { redirectTo: "/loggedin" });
+        await signOut({ redirectTo: "/" });
       }}
     >
-      <Button type="submit">Sign in with GitHub</Button>
+      <Button type="submit">Sign out</Button>
     </form>
   );
 }
