@@ -36,7 +36,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const convexToken = await new SignJWT({
         // These fields will be available on `ctx.auth.getUserIdentity()`
         // in Convex functions:
-        sub: session.userId,
+        sub: `${session.userId};${(session as any)._id}`,
       })
         .setProtectedHeader({ alg: "RS256" })
         .setIssuedAt()

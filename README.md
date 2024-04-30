@@ -18,7 +18,7 @@ There are 4 branches in this repo with increasingly sophisticated auth setup:
 Clone the template and install dependencies:
 
 ```
-npm create convex@latest -- -t get-convex/convex-nextauth-template#magiclink
+npm create convex@latest -- -t get-convex/convex-nextauth-template#magiclink-session-jwt
 ```
 
 Then:
