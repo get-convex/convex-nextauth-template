@@ -18,7 +18,7 @@ There are 4 branches in this repo with increasingly sophisticated auth setup:
 Clone the template and install dependencies:
 
 ```
-npm create convex@latest -- -t get-convex/convex-nextauth-template#github-no-db
+npm create convex@latest -- -t get-convex/convex-nextauth-template#magiclink
 ```
 
 Then:
@@ -31,13 +31,18 @@ Then:
      running `npx convex dashboard`
 3. Generate a random secret (via `openssl rand -base64 33` or `npx auth secret`)
    and save it as `AUTH_SECRET` to the `.env.local` file
-4. Follow
+4. Generate another random secret and save it as `CONVEX_AUTH_ADAPTER_SECRET` to
+   the `.env.local` file and to your Convex dashboard (the value must match)
+5. Follow
    [this guide](https://authjs.dev/guides/configuring-github#registering-your-app)
    to create a GitHub OAuth app and then add `AUTH_GITHUB_ID` and
    `AUTH_GITHUB_SECRET` to `.env.local`
+6. Follow
+   [this guide](https://authjs.dev/guides/configuring-resend#registering-your-app)
+   to sign up for Resend and then add `AUTH_RESEND_KEY` to `.env.local`
 
-Now your `.env.local` should match `.env.example` and there should be a `JWKS`
-variable on your Convex dashboard.
+Now your `.env.local` should match `.env.example` and there should be `JWKS` and
+`CONVEX_AUTH_ADAPTER_SECRET` variables on your Convex dashboard.
 
 You can now run:
 

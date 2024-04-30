@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 
-import { signIn } from "@/auth";
+import { auth, signIn } from "@/auth";
 import { StickyHeader } from "@/components/layout/sticky-header";
 import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
 
 export default function Home() {
   return (
@@ -30,10 +31,16 @@ export function SignIn() {
     <form
       action={async () => {
         "use server";
-        await signIn("github", { redirectTo: "/loggedin" });
+
+        // Skip sign-in screen if the user is already signed in
+        if ((await auth()) !== null) {
+          redirect("/loggedin");
+        }
+
+        await signIn(undefined, { redirectTo: "/loggedin" });
       }}
     >
-      <Button type="submit">Sign in with GitHub</Button>
+      <Button type="submit">Sign in</Button>
     </form>
   );
 }

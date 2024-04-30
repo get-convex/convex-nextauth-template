@@ -28,7 +28,7 @@ export const listNumbers = query({
       .order("desc")
       .take(args.count);
     return {
-      viewer: (await ctx.db.get(viewerId))!.name ?? "name missing",
+      viewer: (await ctx.db.get(viewerId))!.email ?? "missing email",
       numbers: numbers.toReversed().map((number) => number.value),
     };
   },
