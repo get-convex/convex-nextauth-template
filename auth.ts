@@ -1,5 +1,7 @@
+import { api } from "@/convex/_generated/api";
+import { fetchMutation } from "convex/nextjs";
 import { SignJWT, importPKCS8 } from "jose";
-import NextAuth, { DefaultSession } from "next-auth";
+import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 
 if (process.env.CONVEX_AUTH_PRIVATE_KEY === undefined) {
@@ -19,20 +21,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [GitHub],
   callbacks: {
     // Attach additional properties from GitHub OAuth to the Auth.js token
-    jwt({ token, profile }) {
+    async jwt({ token, profile, user }) {
       if (profile !== undefined) {
         const { login: ghUserName, id: ghId } = profile;
-        return { ...token, ghUserName, ghId: `gh_${ghId}` };
+        const convexUserId = await fetchMutation(api.authAdapter.upsertUser, {
+          secret: process.env.CONVEX_AUTH_ADAPTER_SECRET!,
+          user: {
+            ghId: "" + ghId!,
+            ghUserName: ghUserName as string,
+            name: user.name ?? null,
+            email: user.email!,
+            picture: user.image ?? null,
+          },
+        });
+        return { ...token, convexUserId };
       }
       return token;
     },
     // Attach a JWT for authenticating with Convex
-    async session({ session, token: { ghId, ghUserName } }) {
-      const user = {
-        ...session.user,
-        ghId: ghId as string,
-        ghUserName: ghUserName as string,
-      };
+    async session({ session, token: { convexUserId } }) {
       const privateKey = await importPKCS8(
         process.env.CONVEX_AUTH_PRIVATE_KEY!,
         "RS256",
@@ -40,11 +47,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const convexToken = await new SignJWT({
         // These fields will be available on `ctx.auth.getUserIdentity()`
         // in Convex functions:
-        sub: user.ghId,
-        nickname: user.ghUserName,
-        name: user.name,
-        email: user.email,
-        picture: user.image,
+        sub: convexUserId as string,
       })
         .setProtectedHeader({ alg: "RS256" })
         .setIssuedAt()
@@ -52,18 +55,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         .setAudience("convex")
         .setExpirationTime("1h")
         .sign(privateKey);
-      return { ...session, user, convexToken };
+      return { ...session, convexToken };
     },
   },
 });
 
-// Update the Session type with the property we added above
 declare module "next-auth" {
   interface Session {
-    user: {
-      ghId: string;
-      ghUserName: string;
-    } & DefaultSession["user"];
     convexToken: string;
   }
 }
