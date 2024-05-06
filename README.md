@@ -4,21 +4,12 @@ This template provides a minimal setup to get Convex working with
 [Next.js](https://nextjs.org/). It uses [Auth.js](https://authjs.dev) for user
 authentication.
 
-## Versions
-
-There are 4 branches in this repo with increasingly sophisticated auth setup:
-
-- [GitHub OAuth with no user storage](https://github.com/get-convex/convex-nextauth-template/tree/github-no-db)
-- [GitHub OAuth with storing users in the DB](https://github.com/get-convex/convex-nextauth-template/tree/github)
-- [GitHub OAuth + Magic Links](https://github.com/get-convex/convex-nextauth-template/tree/magiclink)
-- [GitHub OAuth + Magic Links with session IDs](https://github.com/get-convex/convex-nextauth-template/tree/magiclink-session-jwt)
-
 ## Setting up
 
 Clone the template and install dependencies:
 
 ```
-npm create convex@latest -- -t get-convex/convex-nextauth-template#magiclink
+npm create convex@latest -- -t get-convex/convex-nextauth-template
 ```
 
 Then:
@@ -32,7 +23,8 @@ Then:
 3. Generate a random secret (via `openssl rand -base64 33` or `npx auth secret`)
    and save it as `AUTH_SECRET` to the `.env.local` file
 4. Generate another random secret and save it as `CONVEX_AUTH_ADAPTER_SECRET` to
-   the `.env.local` file and to your Convex dashboard (the value must match)
+   - the `.env.local` file
+   - to your Convex dashboard
 5. Follow
    [this guide](https://authjs.dev/guides/configuring-github#registering-your-app)
    to create a GitHub OAuth app and then add `AUTH_GITHUB_ID` and
