@@ -144,15 +144,15 @@ function callMutation<Mutation extends FunctionReference<"mutation">>(
   return fetchMutation(mutation, addSecret(args) as any);
 }
 
-if (process.env.CONVEX_AUTH_ADAPTER_SECRET === undefined) {
-  throw new Error("Missing CONVEX_AUTH_ADAPTER_SECRET environment variable");
-}
-
 function addSecret(args: Record<string, any>) {
+  if (process.env.CONVEX_AUTH_ADAPTER_SECRET === undefined) {
+    throw new Error("Missing CONVEX_AUTH_ADAPTER_SECRET environment variable");
+  }
+
   return { ...args, secret: process.env.CONVEX_AUTH_ADAPTER_SECRET! };
 }
 
-function maybeUserFromDB(user: Doc<"users"> | null) {
+export function maybeUserFromDB(user: Doc<"users"> | null) {
   if (user === null) {
     return null;
   }
@@ -167,7 +167,7 @@ function userFromDB(user: Doc<"users">) {
   };
 }
 
-function maybeSessionFromDB(session: Doc<"sessions"> | null) {
+export function maybeSessionFromDB(session: Doc<"sessions"> | null) {
   if (session === null) {
     return null;
   }
@@ -178,7 +178,7 @@ function sessionFromDB(session: Doc<"sessions">) {
   return { ...session, id: session._id, expires: new Date(session.expires) };
 }
 
-function maybeVerificationTokenFromDB(
+export function maybeVerificationTokenFromDB(
   verificationToken: Doc<"verificationTokens"> | null,
 ) {
   if (verificationToken === null) {

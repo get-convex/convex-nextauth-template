@@ -52,6 +52,7 @@
     "cmdk": "^0.2.0",
     "convex": "^1.11.2",
     "convex-helpers": "^0.1.35",
+    "convex-test": "^0.0.14",
     "date-fns": "^2.30.0",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
@@ -69,6 +70,7 @@
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.7",
     "typescript": "5.2.2",
+    "vitest": "^1.6.0",
     "zod": "^3.22.4"
   },
   "devDependencies": {
