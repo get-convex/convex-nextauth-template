@@ -145,7 +145,9 @@ function callMutation<Mutation extends FunctionReference<"mutation">>(
 }
 
 if (process.env.CONVEX_AUTH_ADAPTER_SECRET === undefined) {
-  throw new Error("Missing CONVEX_AUTH_ADAPTER_SECRET environment variable");
+  throw new Error(
+    "Missing CONVEX_AUTH_ADAPTER_SECRET Next.js environment variable",
+  );
 }
 
 function addSecret(args: Record<string, any>) {

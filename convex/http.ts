@@ -30,6 +30,9 @@ http.route({
   path: "/.well-known/jwks.json",
   method: "GET",
   handler: httpAction(async () => {
+    if (process.env.JWKS === undefined) {
+      throw new Error("Missing JWKS Convex environment variable");
+    }
     return new Response(process.env.JWKS, {
       status: 200,
       headers: {

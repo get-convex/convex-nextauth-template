@@ -5,11 +5,15 @@ import GitHub from "next-auth/providers/github";
 import Resend from "next-auth/providers/resend";
 
 if (process.env.CONVEX_AUTH_PRIVATE_KEY === undefined) {
-  throw new Error("Missing CONVEX_AUTH_PRIVATE_KEY environment variable");
+  throw new Error(
+    "Missing CONVEX_AUTH_PRIVATE_KEY Next.js environment variable",
+  );
 }
 
 if (process.env.NEXT_PUBLIC_CONVEX_URL === undefined) {
-  throw new Error("Missing NEXT_PUBLIC_CONVEX_URL environment variable");
+  throw new Error(
+    "Missing NEXT_PUBLIC_CONVEX_URL Next.js environment variable",
+  );
 }
 
 const CONVEX_SITE_URL = process.env.NEXT_PUBLIC_CONVEX_URL!.replace(
